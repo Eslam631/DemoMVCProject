@@ -1,3 +1,7 @@
+using Demo.Data.Access.Data.Context;
+using Demo.Data.Access.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 namespace Demo.Perestation
 {
     public class Program
@@ -8,7 +12,13 @@ namespace Demo.Perestation
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddDbContext<ApplicationDbContext>(Option =>
+            { Option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection ")); });
+           
+            
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -21,6 +31,8 @@ namespace Demo.Perestation
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            
 
             app.UseRouting();
 
