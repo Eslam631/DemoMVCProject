@@ -1,3 +1,4 @@
+using Demo.Business.Servers;
 using Demo.Data.Access.Data.Context;
 using Demo.Data.Access.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -13,11 +14,11 @@ namespace Demo.Perestation
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<ApplicationDbContext>(Option =>
-            { Option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection ")); });
+            { Option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")); });
            
             
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-
+            builder.Services.AddScoped<IDepartmentServer, DepartmentServer>();
             
             var app = builder.Build();
 
