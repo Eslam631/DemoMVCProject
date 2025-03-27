@@ -1,6 +1,8 @@
-using Demo.Business.Servers;
+
+using Demo.Business.Services;
 using Demo.Data.Access.Data.Context;
-using Demo.Data.Access.Repositories;
+using Demo.Data.Access.Repositories.DepartmentRepo;
+using Demo.Data.Access.Repositories.EmployeeRepo;
 using Microsoft.EntityFrameworkCore;
 
 namespace Demo.Perestation
@@ -18,7 +20,8 @@ namespace Demo.Perestation
            
             
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            builder.Services.AddScoped<IDepartmentServer, DepartmentServer>();
+        builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             
             var app = builder.Build();
 

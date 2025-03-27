@@ -1,5 +1,5 @@
 ﻿using Demo.Business.DTO.DepartmentDto;
-using Demo.Data.Access.Models;
+using Demo.Data.Access.Models.DepartmentModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Demo.Business.Factroies
 {
-   public static class DepartmentFactroy
+    public static class DepartmentFactroy
     {
         public static DepartmentGetAllDto ToDepartmentGetAllDto(this Department department)
         {

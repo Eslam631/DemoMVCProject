@@ -1,17 +1,18 @@
 ﻿using Demo.Business.DTO.DepartmentDto;
-using Demo.Business.Servers;
+
+using Demo.Business.Services;
 using Demo.Perestation.ViewModels.DepartmentVM;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.Perestation.Controllers
 {
-    public class DepartmentController(IDepartmentServer _departmentServer,ILogger<DepartmentController> _logger,
+    public class DepartmentController(IDepartmentService _departmentService,ILogger<DepartmentController> _logger,
         IWebHostEnvironment _environment) : Controller
     {
         [HttpGet]
         public IActionResult Index()
         {
-            var department = _departmentServer.GetAllDepartment();
+            var department = _departmentService.GetAllDepartment();
             return View(department);
         }
 
@@ -27,7 +28,7 @@ namespace Demo.Perestation.Controllers
                 try
                 {
 
-                    var Result = _departmentServer.AddDepartment(departmentDto);
+                    var Result = _departmentService.AddDepartment(departmentDto);
                     if(Result>0)
                         return RedirectToAction(nameof(Index));
                     else
@@ -78,7 +79,7 @@ namespace Demo.Perestation.Controllers
             if(!id.HasValue)
                 return BadRequest();  
          
-            var Result=_departmentServer.GetDepartmentById(id.Value);
+            var Result=_departmentService.GetDepartmentById(id.Value);
 
             if (Result == null)
                 return NotFound();
@@ -96,7 +97,7 @@ namespace Demo.Perestation.Controllers
                 return BadRequest();
             else
             {
-                var result=_departmentServer.GetDepartmentById(id.Value);
+                var result=_departmentService.GetDepartmentById(id.Value);
 
                 if(result == null)
                     return NotFound();
@@ -125,7 +126,7 @@ namespace Demo.Perestation.Controllers
             
                 try
                 {
-                    var UpdateDepartment = _departmentServer.UpdateDepartment(new UpdateDepartmentDto()
+                    var UpdateDepartment = _departmentService.UpdateDepartment(new UpdateDepartmentDto()
                     {
                         Id = id,
                         Name = model.Name,
@@ -161,6 +162,65 @@ namespace Demo.Perestation.Controllers
             return View(model);
         }
 
+        #endregion
+
+
+        #region Delete Department
+
+        //[HttpGet]
+        //public IActionResult Delete(int? id)
+        //{
+        //    if (!id.HasValue)
+        //        return BadRequest();
+        //    else { 
+        //    var Department = _departmentService.GetDepartmentById(id.Value);
+        //        if (Department == null)
+        //            return NotFound();
+        //        return View(Department);
+        //    }
+        //}
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            if (id == 1)
+                return BadRequest();
+            else
+            {
+                try
+                {
+                    var Result = _departmentService.DeleteDepartment(id);
+
+                    if (Result)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "DepartmentByIdDto Can Not Deleted");
+                        return RedirectToAction(nameof(Delete), new {id});
+                    }
+
+                }
+                catch (Exception  ex)
+                {
+                    if (_environment.IsDevelopment())
+                    {
+                        ModelState.AddModelError(string.Empty, ex.Message);
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else {
+                    
+                        _logger.LogError(string.Empty, ex.Message);
+                        return View("ErrorView", ex);
+                    
+                    }
+                 
+                }
+            }
+
+
+        }
         #endregion
     }
 }

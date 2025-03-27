@@ -1,8 +1,8 @@
 ﻿using Demo.Business.DTO.DepartmentDto;
 
-namespace Demo.Business.Servers
+namespace Demo.Business.Services
 {
-    public interface IDepartmentServer
+    public interface IDepartmentService
     {
         int AddDepartment(AddDepartmentDto departmentDto);
         bool DeleteDepartment(int id);
