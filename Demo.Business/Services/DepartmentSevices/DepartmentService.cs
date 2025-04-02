@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Demo.Business.Services
+namespace Demo.Business.Services.DepartmentSevices
 {
     public class DepartmentService(IDepartmentRepository _departmentRepository) : IDepartmentService
     {

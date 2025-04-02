@@ -1,6 +1,6 @@
 ﻿using Demo.Business.DTO.DepartmentDto;
 
-namespace Demo.Business.Services
+namespace Demo.Business.Services.DepartmentSevices
 {
     public interface IDepartmentService
     {

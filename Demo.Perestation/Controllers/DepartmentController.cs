@@ -1,6 +1,5 @@
 ﻿using Demo.Business.DTO.DepartmentDto;
-
-using Demo.Business.Services;
+using Demo.Business.Services.DepartmentSevices;
 using Demo.Perestation.ViewModels.DepartmentVM;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,8 +21,9 @@ namespace Demo.Perestation.Controllers
 
 
         [HttpPost]
+
         public IActionResult Create(AddDepartmentDto departmentDto)
-        {
+         {
             if (ModelState.IsValid) {
                 try
                 {

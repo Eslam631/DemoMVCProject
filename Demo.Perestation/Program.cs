@@ -1,8 +1,10 @@
-
-using Demo.Business.Services;
+using Demo.Business.Profiles;
+using Demo.Business.Services.DepartmentSevices;
+using Demo.Business.Services.EmployeeServices;
 using Demo.Data.Access.Data.Context;
 using Demo.Data.Access.Repositories.DepartmentRepo;
 using Demo.Data.Access.Repositories.EmployeeRepo;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Demo.Perestation
@@ -14,14 +16,19 @@ namespace Demo.Perestation
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(Option =>
+            {
+                Option.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
             builder.Services.AddDbContext<ApplicationDbContext>(Option =>
             { Option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")); });
-           
+
+            builder.Services.AddAutoMapper(E => E.AddProfile(new MappingProfiles()));
             
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
         builder.Services.AddScoped<IDepartmentService, DepartmentService>();
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddScoped<IEmployeeService, EmployeeService>();
             
             var app = builder.Build();
 
