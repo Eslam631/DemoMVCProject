@@ -1,4 +1,5 @@
-﻿using Demo.Data.Access.Models.Shared;
+﻿using Demo.Data.Access.Models.EmployeeModel;
+using Demo.Data.Access.Models.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace Demo.Data.Access.Models.DepartmentModel
         public string Code { get; set; } = null!;
         public string? Description { get; set; }
 
+        public virtual ICollection<Employee> Employees { get; set; }=new HashSet<Employee>();
 
     }
 }

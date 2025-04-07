@@ -11,7 +11,7 @@ namespace Demo.Business.Services.EmployeeServices
     {
         int AddEmployee(AddEmployeeDto EmployeeDto);
         bool DeleteEmployee(int id);
-        IEnumerable<GetAllEmployeeDto> GetAllEmployee();
+        IEnumerable<GetAllEmployeeDto> GetAllEmployee(string? Search);
         EmployeeByIdDto? GetEmployeeById(int id);
         int UpdateEmployee(UpdateEmployeeDto EmployeeDto);
     }

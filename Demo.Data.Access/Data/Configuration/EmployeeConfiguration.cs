@@ -10,7 +10,7 @@ namespace Demo.Data.Access.Data.Configuration
 {
   public class EmployeeConfiguration :BaseEntityConfiguration<Employee> ,IEntityTypeConfiguration<Employee>
     {
-        public void Configure(EntityTypeBuilder<Employee> builder)
+        public new  void Configure(EntityTypeBuilder<Employee> builder)
         {
             builder.Property(E => E.Name).HasColumnType("nvarchar(50)");
             builder.Property(E => E.Address).HasColumnType("nvarchar(150)");

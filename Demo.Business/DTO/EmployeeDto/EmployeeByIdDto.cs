@@ -1,4 +1,5 @@
-﻿ using System;
+﻿using Demo.Data.Access.Models.DepartmentModel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -30,5 +31,7 @@ namespace Demo.Business.DTO.EmployeeDto
         public DateTime CreatedOn {  get; set; }
         public int LastModifiedBy { get; set; }
         public DateTime LastModifiedOn { get; set; }
+        public int? DepartmentId { get; set; }
+        public string? Department { get; set; }
     }
 }

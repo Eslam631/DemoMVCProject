@@ -1,4 +1,5 @@
-﻿using Demo.Data.Access.Models.Shared;
+﻿using Demo.Data.Access.Models.DepartmentModel;
+using Demo.Data.Access.Models.Shared;
 using Demo.Data.Access.Models.Shared.Enums;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,9 @@ namespace Demo.Data.Access.Models.EmployeeModel
         public string? Email { get; set; }
         public Gender Gender { get; set; }
         public EmployeeType EmployeeType { get;set; }
+
+        public int? DepartmentId { get; set; }
+        public virtual Department? Department { get; set; }
 
 
     }
