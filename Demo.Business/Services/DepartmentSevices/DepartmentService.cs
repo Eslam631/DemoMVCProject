@@ -1,15 +1,15 @@
 ﻿using Demo.Business.DTO.DepartmentDto;
 using Demo.Business.Factroies;
-using Demo.Data.Access.Repositories;
+using Demo.Data.Access.Repositories.DepartmentRepo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Demo.Business.Servers
+namespace Demo.Business.Services.DepartmentSevices
 {
-    public class DepartmentServer(IDepartmentRepository _departmentRepository) : IDepartmentServer
+    public class DepartmentService(IDepartmentRepository _departmentRepository) : IDepartmentService
     {
 
         public IEnumerable<DepartmentGetAllDto> GetAllDepartment()
