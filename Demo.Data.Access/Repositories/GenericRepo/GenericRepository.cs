@@ -18,10 +18,10 @@ namespace Demo.Data.Access.Repositories.GenericRepo
         {
 
             if (WithTracking)
-                return _dbContext.Set<TEntity>().ToList();
+                return _dbContext.Set<TEntity>().Where(E => E.IsDeleted != true).ToList();
             else
 
-                return _dbContext.Set<TEntity>().AsNoTracking().ToList();
+                return _dbContext.Set<TEntity>().Where(E => E.IsDeleted != true).AsNoTracking().ToList();
 
 
 
@@ -65,12 +65,12 @@ namespace Demo.Data.Access.Repositories.GenericRepo
 
         public IEnumerable<TEntity> GetAll(Expression<Func<TEntity,bool>> Predicate)
         {
-            var listOfEmployees = _dbContext.Set<TEntity>()
+           return _dbContext.Set<TEntity>()
          .Where(Predicate)
          .ToList();
 
 
-            return listOfEmployees;
+          
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Demo.Business.Services.EmployeeServices
                 listOfEmployee = _unitOfWork.EmployeeRepository.GetAll();
 
             else
-                listOfEmployee = _unitOfWork.EmployeeRepository.GetAll(E => E.Name.ToLower().Contains(Search.ToLower()));
+                listOfEmployee = _unitOfWork.EmployeeRepository.GetAll(E => (E.Name.ToLower().Contains(Search.ToLower()))&& (E.IsDeleted != true));
 
 
             return _mapper.Map<IEnumerable<Employee>,IEnumerable<GetAllEmployeeDto>>(listOfEmployee);
