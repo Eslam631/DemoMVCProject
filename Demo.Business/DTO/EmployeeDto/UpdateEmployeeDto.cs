@@ -1,4 +1,5 @@
 ﻿using Demo.Data.Access.Models.Shared.Enums;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -44,6 +45,7 @@ namespace Demo.Business.DTO.EmployeeDto
 
         public string? Department { get; set; }
 
+        public IFormFile? Image { get; set; }
 
     }
 }

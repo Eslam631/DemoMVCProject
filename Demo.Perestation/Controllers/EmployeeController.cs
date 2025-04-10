@@ -1,13 +1,16 @@
 ﻿using Demo.Business.DTO.EmployeeDto;
+using Demo.Business.Services.AttachmentServices;
 using Demo.Business.Services.EmployeeServices;
 using Demo.Data.Access.Models.EmployeeModel;
 using Demo.Data.Access.Models.Shared.Enums;
 using Demo.Perestation.ViewModels.EmployeeVM;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.Perestation.Controllers
 {
-    public class EmployeeController(IEmployeeService _employeeService,IWebHostEnvironment _environment,ILogger< EmployeeController> _logger) : Controller
+    [Authorize]
+    public class EmployeeController(IEmployeeService _employeeService,IWebHostEnvironment _environment,ILogger< EmployeeController> _logger,IAttachmentService _attachmentService) : Controller
     {
         [HttpGet]
         public IActionResult Index(string? EmployeeSearchName)
@@ -48,6 +51,7 @@ namespace Demo.Perestation.Controllers
                         PhoneNumber = employeeViewModel.PhoneNumber,
                         Salary = employeeViewModel.Salary,
                          DepartmentId = employeeViewModel.DepartmentId,
+                          Image = employeeViewModel.Image,
                     };
                     var Result = _employeeService.AddEmployee(addEmployeeDto);
                     if (Result > 0)
@@ -99,48 +103,59 @@ namespace Demo.Perestation.Controllers
         #region Edit
 
         [HttpGet]
-        public IActionResult Edit( int? id )
+        public IActionResult Edit(int? id)
         {
             if (id == null)
                 return BadRequest();
             else
             {
-              var Employee=  _employeeService.GetEmployeeById(id.Value);
-                if(Employee == null)
+                var Employee = _employeeService.GetEmployeeById(id.Value);
+                if (Employee == null)
                     return NotFound();
                 else
                 {
-                    var employeeViewModel= new EmployeeViewModel()
-                    {
-                        Address = Employee.Address,
-                        Age = Employee.Age,
-                        Email = Employee.Email,
-                        HiringDate = Employee.HiringDate,
-                       
-                        IsActive = Employee.IsActive,
-                        Name = Employee.Name,
-                        PhoneNumber = Employee.PhoneNumber,
-                        Salary = Employee.Salary,
-                        EmployeeType = Enum.Parse<EmployeeType>(Employee.EmployeeType),
-                        Gender = Enum.Parse<Gender>(Employee.Gender), 
-                         DepartmentId=Employee.DepartmentId
-                     
+                    EmployeeViewModel employeeViewModel;
 
-                    };
+              
+
+                        employeeViewModel = new EmployeeViewModel()
+                        {
+                            Address = Employee.Address,
+                            Age = Employee.Age,
+                            Email = Employee.Email,
+                            HiringDate = Employee.HiringDate,
+
+                            IsActive = Employee.IsActive,
+                            Name = Employee.Name,
+                            PhoneNumber = Employee.PhoneNumber,
+                            Salary = Employee.Salary,
+                            EmployeeType = Enum.Parse<EmployeeType>(Employee.EmployeeType),
+                            Gender = Enum.Parse<Gender>(Employee.Gender),
+                            DepartmentId = Employee.DepartmentId,
+                          
+                           
+
+
+
+
+                        };
+                    
                     return View(employeeViewModel);
                 }
             }
-            
-
-            
-            
-
         }
+
+
+
+
+
+
 
 
         [HttpPost]
        
-        public IActionResult Edit([FromRoute]int? id, EmployeeViewModel employeeViewModel ) {
+        public IActionResult Edit([FromRoute]int? id, EmployeeViewModel employeeViewModel )
+        {
             if (id == null )
                 return BadRequest();
             if (!ModelState.IsValid)
@@ -162,6 +177,7 @@ namespace Demo.Perestation.Controllers
                         EmployeeType = employeeViewModel.EmployeeType,
                         Gender = employeeViewModel.Gender,
                          DepartmentId = employeeViewModel.DepartmentId, 
+                          Image = employeeViewModel.Image,
                           
                     });
                     if (Result > 0)

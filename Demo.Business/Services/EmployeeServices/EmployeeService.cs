@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Demo.Business.DTO.EmployeeDto;
 using Demo.Business.Factroies;
+using Demo.Business.Services.AttachmentServices;
 using Demo.Data.Access.Models.EmployeeModel;
 using Demo.Data.Access.Repositories.EmployeeRepo;
 using Demo.Data.Access.Repositories.UnitOfWork;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Demo.Business.Services.EmployeeServices
 {
-    public class EmployeeService(IUnitOfWork _unitOfWork,IMapper _mapper) : IEmployeeService
+    public class EmployeeService(IUnitOfWork _unitOfWork,IMapper _mapper, IAttachmentService _attachmentService) : IEmployeeService
     {
         public IEnumerable<GetAllEmployeeDto> GetAllEmployee(string? Search)
         {
@@ -34,7 +35,17 @@ namespace Demo.Business.Services.EmployeeServices
         }
         public int AddEmployee(AddEmployeeDto EmployeeDto)
         {
-                _unitOfWork.EmployeeRepository.Add(_mapper.Map<AddEmployeeDto,Employee>(EmployeeDto));
+            var Employee = _mapper.Map<AddEmployeeDto, Employee>(EmployeeDto);
+
+            if(EmployeeDto.Image is not null)
+            {
+                Employee.ImageName = _attachmentService.Upload(EmployeeDto.Image, "Images");
+                 
+            }
+
+                _unitOfWork.EmployeeRepository.Add(Employee);
+
+
             var Result = _unitOfWork.SaveChange();
             if (Result > 0)
 
@@ -63,7 +74,16 @@ namespace Demo.Business.Services.EmployeeServices
         {
             var Employee=_mapper.Map<UpdateEmployeeDto,Employee>(EmployeeDto);
 
-                _unitOfWork.EmployeeRepository.Update(Employee);
+            if (EmployeeDto.Image is not null)
+            {
+                Employee.ImageName = _attachmentService.Upload(EmployeeDto.Image, "Images");
+
+            }
+          
+
+
+
+            _unitOfWork.EmployeeRepository.Update(Employee);
             var Result = _unitOfWork.SaveChange();
 
             if (Result > 0) return Result;
