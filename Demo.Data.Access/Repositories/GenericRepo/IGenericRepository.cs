@@ -9,14 +9,16 @@ using System.Threading.Tasks;
 
 namespace Demo.Data.Access.Repositories.GenericRepo
 {
-  public interface IGenericRepository<T>where T :BaseEntity
+  public interface IGenericRepository<TEntity>where TEntity :BaseEntity
     {
 
-        int Add(T Model);
-        int Delete(T Model);
-        IEnumerable<T> GetAll(bool WithTracking = false);
-        IEnumerable<TResult> GetAll<TResult>(Expression<Func<T,TResult>> selector);
-        T? GetById(int id);
-        int Update(T Model);
+        void Add(TEntity Model);
+        void Delete(TEntity Model);
+        IEnumerable<TEntity> GetAll(bool WithTracking = false);
+        IEnumerable<TResult> GetAll<TResult>(Expression<Func<TEntity,TResult>> selector);
+        IEnumerable<TEntity> GetAll(Expression<Func<TEntity,bool>> Predicate);
+        TEntity? GetById(int id);
+     void Update(TEntity Model);
+        
     }
 }

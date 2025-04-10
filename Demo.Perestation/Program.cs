@@ -4,6 +4,7 @@ using Demo.Business.Services.EmployeeServices;
 using Demo.Data.Access.Data.Context;
 using Demo.Data.Access.Repositories.DepartmentRepo;
 using Demo.Data.Access.Repositories.EmployeeRepo;
+using Demo.Data.Access.Repositories.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,16 +20,20 @@ namespace Demo.Perestation
             builder.Services.AddControllersWithViews(Option =>
             {
                 Option.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+
             });
             builder.Services.AddDbContext<ApplicationDbContext>(Option =>
-            { Option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")); });
+            { Option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                Option.UseLazyLoadingProxies();
+            });
 
             builder.Services.AddAutoMapper(E => E.AddProfile(new MappingProfiles()));
             
-            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
         builder.Services.AddScoped<IDepartmentService, DepartmentService>();
-            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             
             var app = builder.Build();
 

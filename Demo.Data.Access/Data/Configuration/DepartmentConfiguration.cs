@@ -12,7 +12,9 @@ namespace Demo.Data.Access.Data.Configuration
          
             builder.Property(D => D.Code).HasColumnType("nvarchar(20)");
             builder.Property(D => D.Id).UseIdentityColumn(10, 10);   
+            builder.HasMany(d => d.Employees).WithOne(E=>E.Department).HasForeignKey(e => e.DepartmentId).OnDelete(DeleteBehavior.SetNull);
             base.Configure(builder);
+
         }
     }
 }

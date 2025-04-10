@@ -22,21 +22,31 @@ namespace Demo.Perestation.Controllers
 
         [HttpPost]
 
-        public IActionResult Create(AddDepartmentDto departmentDto)
+        public IActionResult Create(DepartmentViewModel  departmentViewModel)
          {
             if (ModelState.IsValid) {
                 try
                 {
-
+                 var  departmentDto= new AddDepartmentDto()
+                 {
+                      Code = departmentViewModel.Code,
+                       CreateOn=departmentViewModel.CreationOn,
+                        Description = departmentViewModel.Description,
+                         Name = departmentViewModel.Name,
+                 };
+                    string Message;
                     var Result = _departmentService.AddDepartment(departmentDto);
-                    if(Result>0)
-                        return RedirectToAction(nameof(Index));
-                    else
-                    {
-                        ModelState.AddModelError("Message", "Department Can't Be Created");
-                      
+                    if (Result > 0)
+                        Message = $"Department {departmentViewModel.Name} Create Success";
 
-                    }
+
+                    else
+                    
+                       Message=$"Department {departmentViewModel.Name} Can't Be Created";
+
+
+                    TempData["Message"]=Message;
+                    return RedirectToAction(nameof(Index));
                 }
                
                 catch (Exception ex)
@@ -63,7 +73,7 @@ namespace Demo.Perestation.Controllers
             }
             
             
-            return View(departmentDto);
+            return View(departmentViewModel);
 
             
         }
@@ -103,7 +113,7 @@ namespace Demo.Perestation.Controllers
                     return NotFound();
                 else
                 {
-                    return View(new DepartmentEditViewModel() { 
+                    return View(new DepartmentViewModel() { 
                    
                     
                          Code = result.Code,
@@ -119,7 +129,7 @@ namespace Demo.Perestation.Controllers
 
 
         [HttpPost]
-        public IActionResult Edit([FromRoute] int id,DepartmentEditViewModel model) {
+        public IActionResult Edit([FromRoute] int id,DepartmentViewModel departmentViewModel) {
 
             if (ModelState.IsValid)
             {
@@ -129,10 +139,10 @@ namespace Demo.Perestation.Controllers
                     var UpdateDepartment = _departmentService.UpdateDepartment(new UpdateDepartmentDto()
                     {
                         Id = id,
-                        Name = model.Name,
-                        Code = model.Code,
-                        CreatedOn = model.CreationOn,
-                        Description = model.Description,
+                        Name = departmentViewModel.Name,
+                        Code = departmentViewModel.Code,
+                        CreatedOn = departmentViewModel.CreationOn,
+                        Description = departmentViewModel.Description,
 
                     });
                     if (UpdateDepartment > 0)
@@ -159,7 +169,7 @@ namespace Demo.Perestation.Controllers
                 }
 
             }
-            return View(model);
+            return View(departmentViewModel);
         }
 
         #endregion
@@ -167,18 +177,19 @@ namespace Demo.Perestation.Controllers
 
         #region Delete Department
 
-        //[HttpGet]
-        //public IActionResult Delete(int? id)
-        //{
-        //    if (!id.HasValue)
-        //        return BadRequest();
-        //    else { 
-        //    var Department = _departmentService.GetDepartmentById(id.Value);
-        //        if (Department == null)
-        //            return NotFound();
-        //        return View(Department);
-        //    }
-        //}
+        [HttpGet]
+        public IActionResult Delete(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest();
+            else
+            {
+                var Department = _departmentService.GetDepartmentById(id.Value);
+                if (Department == null)
+                    return NotFound();
+                return View(Department);
+            }
+        }
 
         [HttpPost]
         public IActionResult Delete(int id)
