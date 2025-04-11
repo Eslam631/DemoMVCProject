@@ -45,6 +45,7 @@ namespace Demo.Business.DTO.EmployeeDto
 
         public string? Department { get; set; }
 
+      
         public IFormFile? Image { get; set; }
 
     }

@@ -77,7 +77,7 @@ namespace Demo.Business.Services.EmployeeServices
             if (EmployeeDto.Image is not null)
             {
                 Employee.ImageName = _attachmentService.Upload(EmployeeDto.Image, "Images");
-
+            
             }
           
 

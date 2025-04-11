@@ -5,14 +5,14 @@
 
 
 <h1 class="my-5 w-75">Employee Details</h1>
-@if (string.IsNullOrEmpty(Model.imageName))
+@if (string.IsNullOrEmpty(Model.ImageName))
 {
     <p class="alert alert-warning">No image Avaliable</p>
 }
 else
 {
-    <div class="d-flex justify-content-center align-items-cente ">
-        <img class=" rounded-circle " src="~/Files/Images/@Model.imageName" width="200px" height="200px" alt="Image" />
+    <div class="d-flex justify-content-center align-items-center ">
+        <img class=" rounded-circle " src="~/Files/Images/@Model.ImageName" width="200px" height="200px" alt="Image" />
     </div>
 }
 <ul class="nav nav-tabs" id="employeeTabs" role="tablist">

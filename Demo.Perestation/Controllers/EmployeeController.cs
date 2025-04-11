@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Demo.Perestation.Controllers
 {
     [Authorize]
-    public class EmployeeController(IEmployeeService _employeeService,IWebHostEnvironment _environment,ILogger< EmployeeController> _logger,IAttachmentService _attachmentService) : Controller
+    public class EmployeeController(IEmployeeService _employeeService,IWebHostEnvironment _environment,ILogger< EmployeeController> _logger) : Controller
     {
         [HttpGet]
         public IActionResult Index(string? EmployeeSearchName)
@@ -114,31 +114,35 @@ namespace Demo.Perestation.Controllers
                     return NotFound();
                 else
                 {
+                    
+
+             
+                    
                     EmployeeViewModel employeeViewModel;
 
-              
-
-                        employeeViewModel = new EmployeeViewModel()
-                        {
-                            Address = Employee.Address,
-                            Age = Employee.Age,
-                            Email = Employee.Email,
-                            HiringDate = Employee.HiringDate,
-
-                            IsActive = Employee.IsActive,
-                            Name = Employee.Name,
-                            PhoneNumber = Employee.PhoneNumber,
-                            Salary = Employee.Salary,
-                            EmployeeType = Enum.Parse<EmployeeType>(Employee.EmployeeType),
-                            Gender = Enum.Parse<Gender>(Employee.Gender),
-                            DepartmentId = Employee.DepartmentId,
-                          
-                           
 
 
+                    employeeViewModel = new EmployeeViewModel()
+                    {
+                        Address = Employee.Address,
+                        Age = Employee.Age,
+                        Email = Employee.Email,
+                        HiringDate = Employee.HiringDate,
+
+                        IsActive = Employee.IsActive,
+                        Name = Employee.Name,
+                        PhoneNumber = Employee.PhoneNumber,
+                        Salary = Employee.Salary,
+                        EmployeeType = Enum.Parse<EmployeeType>(Employee.EmployeeType),
+                        Gender = Enum.Parse<Gender>(Employee.Gender),
+                        DepartmentId = Employee.DepartmentId,
+                       
+                       
 
 
-                        };
+
+
+                    };
                     
                     return View(employeeViewModel);
                 }

@@ -10,9 +10,9 @@ namespace Demo.Business.Services.AttachmentServices
 {
     public class AttachmentService : IAttachmentService
     {
-        public List<string> allowExtension = [".png", ".jpeg", ".jpg"];
+        private List<string> allowExtension = [".png", ".jpeg", ".jpg"];
 
-        int MaxSize = 2_0970_152;
+   private   const  int MaxSize = 2_0970_152;
         public string? Upload(IFormFile file, string folderName)
         {
            //1-Check Extension
