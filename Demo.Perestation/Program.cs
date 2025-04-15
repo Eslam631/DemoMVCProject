@@ -1,12 +1,16 @@
 using Demo.Business.Profiles;
+using Demo.Business.Services.AttachmentServices;
 using Demo.Business.Services.DepartmentSevices;
 using Demo.Business.Services.EmployeeServices;
 using Demo.Data.Access.Data.Context;
+using Demo.Data.Access.Models.IdentityModel;
 using Demo.Data.Access.Repositories.DepartmentRepo;
 using Demo.Data.Access.Repositories.EmployeeRepo;
 using Demo.Data.Access.Repositories.UnitOfWork;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Demo.Perestation
 {
@@ -34,7 +38,10 @@ namespace Demo.Perestation
             //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            
+            builder.Services.AddScoped<IAttachmentService, AttachmentService>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -47,16 +54,18 @@ namespace Demo.Perestation
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+          
 
             
 
             app.UseRouting();
 
-        
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=Register}/{id?}");
 
             app.Run();
         }

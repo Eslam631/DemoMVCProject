@@ -33,5 +33,7 @@ namespace Demo.Business.DTO.EmployeeDto
         public DateTime LastModifiedOn { get; set; }
         public int? DepartmentId { get; set; }
         public string? Department { get; set; }
+
+        public string? ImageName { get; set; }
     }
 }

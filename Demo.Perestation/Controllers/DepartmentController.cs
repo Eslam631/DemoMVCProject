@@ -1,10 +1,12 @@
 ﻿using Demo.Business.DTO.DepartmentDto;
 using Demo.Business.Services.DepartmentSevices;
 using Demo.Perestation.ViewModels.DepartmentVM;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.Perestation.Controllers
 {
+    [Authorize]
     public class DepartmentController(IDepartmentService _departmentService,ILogger<DepartmentController> _logger,
         IWebHostEnvironment _environment) : Controller
     {

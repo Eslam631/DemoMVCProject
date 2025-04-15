@@ -5,6 +5,16 @@
 
 
 <h1 class="my-5 w-75">Employee Details</h1>
+@if (string.IsNullOrEmpty(Model.ImageName))
+{
+    <p class="alert alert-warning">No image Avaliable</p>
+}
+else
+{
+    <div class="d-flex justify-content-center align-items-center ">
+        <img class=" rounded-circle " src="~/Files/Images/@Model.ImageName" width="200px" height="200px" alt="Image" />
+    </div>
+}
 <ul class="nav nav-tabs" id="employeeTabs" role="tablist">
     <li class="nav-item" role="presentation">
         <a class="nav-link active" id="general-tab" data-bs-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="true">General</a>
@@ -19,10 +29,14 @@
     <div class="tab-pane fade show active p-4 border" id="general" role="tabpanel" aria-labelledby="general-tab">
 
         <div class="row">
+
+
+
             <div class="form-group mb-3 col-6">
                 <label class="form-label" asp-for="Name"></label>
                 <input asp-for="Name" class="form-control" readonly />
             </div>
+        
             <div class="form-group mb-3 col-6">
                 <label class="form-label" asp-for="Email"></label>
                 <input asp-for="Email" class="form-control" readonly />
