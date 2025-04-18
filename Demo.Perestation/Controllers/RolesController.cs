@@ -1,10 +1,12 @@
 ﻿using Demo.Data.Access.Models.IdentityModel;
 using Demo.Perestation.ViewModels.RolesVM;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.Perestation.Controllers
 {
+    [Authorize]
     public class RolesController(RoleManager<IdentityRole> _roleManager) : Controller
     {
         [HttpGet]
@@ -131,9 +133,89 @@ namespace Demo.Perestation.Controllers
         #endregion
 
 
-        #region Delaties
+        #region Detalis
+
+        [HttpGet]
+
+        public IActionResult Details(string? id )
+        {
+            if(id==null)
+                return BadRequest();
+
+            var Role=_roleManager.FindByIdAsync(id).Result;
+            if (Role == null) return NotFound();
+
+            var RoleViewModel = new RoleViewModel() {
+            
+                 Id=Role.Id,
+                  Name=Role.Name
+            
+            };
+            return View(RoleViewModel);
+
+        }
 
 
+        #endregion
+
+
+        #region Delete
+
+        [HttpGet]
+        public IActionResult Delete(string? id) 
+        {
+            if (id == null)
+                return BadRequest();
+
+            var Role = _roleManager.FindByIdAsync(id).Result;
+            if (Role == null) return NotFound();
+
+            var RoleViewModel = new RoleViewModel()
+            {
+
+                Id = Role.Id,
+                Name = Role.Name
+
+            };
+            return View(RoleViewModel);
+        }
+
+
+        [HttpPost]
+        public IActionResult DeleteRole(string Id)
+        {
+
+
+
+            var user = _roleManager.FindByIdAsync(Id).Result;
+
+
+
+            if (user != null)
+            {
+                try
+                {
+
+                    var Result = _roleManager.DeleteAsync(user).Result;
+                    if (Result != null)
+                        return RedirectToAction(nameof(Index));
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid Operation");
+                    }
+
+
+                }
+                catch (Exception)
+                {
+
+                    ModelState.AddModelError(string.Empty, "Invalid Operation");
+                }
+            }
+
+            return NotFound();
+
+        }
 
         #endregion
     }
