@@ -16,7 +16,7 @@ namespace Demo.Perestation.Controllers
 
             if (RolesSearchName != null)
             {
-                Roles=_roleManager.Roles.Where(R=>R.Name==RolesSearchName).ToList();
+                Roles=_roleManager.Roles.Where(R=>R.Name.ToLower().Contains(RolesSearchName.ToLower())).ToList();
             }
 
             var RoleView = Roles.Select(R => new RoleViewModel()
@@ -98,13 +98,12 @@ namespace Demo.Perestation.Controllers
             if (ModelState.IsValid)
             {
 
-                var Role = new IdentityRole()
-                {
-                    Id = id,
-                    Name = viewModel.Name,
-                    
-                    
-                };
+             var Role=_roleManager.FindByIdAsync(id).Result;
+
+                if (Role == null)
+                    return NotFound();
+
+                Role.Name = viewModel.Name;
 
                 try
                 {
