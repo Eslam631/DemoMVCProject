@@ -7,6 +7,9 @@ using Demo.Data.Access.Models.IdentityModel;
 using Demo.Data.Access.Repositories.DepartmentRepo;
 using Demo.Data.Access.Repositories.EmployeeRepo;
 using Demo.Data.Access.Repositories.UnitOfWork;
+using Demo.Perestation.Helpers;
+using Demo.Perestation.Setting;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -42,7 +45,19 @@ namespace Demo.Perestation
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+            builder.Services.Configure<MailSetting>(builder.Configuration.GetSection("MailSetting"));
+            builder.Services.AddTransient<IMailService, MailService>();
+            builder.Services.AddAuthentication(o =>
+            {
+                o.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 
+            }).AddGoogle(o =>
+            {
+                IConfiguration GoogleAuthSection = builder.Configuration.GetSection("Authentication:Google");
+                o.ClientId = GoogleAuthSection["ClientId"];
+                o.ClientSecret = GoogleAuthSection["ClientSecret"];
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
