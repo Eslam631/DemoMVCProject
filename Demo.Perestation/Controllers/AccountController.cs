@@ -160,9 +160,10 @@ namespace Demo.Perestation.Controllers
                 string Token=TempData["token"]as string??string.Empty ;
 
                 var User = _userManager.FindByEmailAsync(Email).Result;
+
                 if (User is not null) {
 
-                var Result=    _userManager.ResetPasswordAsync(User, Token, viewModel.Password).Result;
+                var Result=_userManager.ResetPasswordAsync(User, Token, viewModel.Password).Result;
 
                     if (Result.Succeeded) 
                     
