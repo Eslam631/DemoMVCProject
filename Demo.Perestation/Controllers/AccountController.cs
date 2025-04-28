@@ -1,18 +1,21 @@
 ﻿using Demo.Data.Access.Models.IdentityModel;
-
+using Demo.Perestation.Helpers;
 using Demo.Perestation.Untilities;
 using Demo.Perestation.ViewModels.AccountVM;
 using Demo.Perestation.Views.Account.PartialViews;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using System.Threading.Tasks;
 using Email = Demo.Perestation.Untilities.Email;
 
 namespace Demo.Perestation.Controllers
 {
-    public class AccountController(UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager) : Controller
+    public class AccountController(UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager,IMailService _mailService) : Controller
     {
         #region Register
         [HttpGet]
@@ -95,6 +98,35 @@ namespace Demo.Perestation.Controllers
 
         #endregion
 
+        #region Googel Login
+
+
+        public IActionResult GoogleLogin()
+        {
+            var prop = new AuthenticationProperties()
+            {
+                RedirectUri = Url.Action(nameof(GoogleResponse))
+            };
+            return Challenge(prop, GoogleDefaults.AuthenticationScheme);
+        }
+        public async Task<IActionResult> GoogleResponse()
+        {
+            var Result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+            var claims = Result.Principal.Identities.FirstOrDefault().Claims.Select(claim =>
+            new
+            {
+                claim.Issuer,
+                claim.OriginalIssuer,
+                claim.Type,
+                claim.Value
+
+            });
+            return RedirectToAction("Index", "Home");
+
+        }
+
+
+        #endregion
         public new IActionResult SignOut()
         {
             _signInManager.SignOutAsync().GetAwaiter().GetResult();
@@ -123,7 +155,7 @@ namespace Demo.Perestation.Controllers
                         Body = Body,
                     };
 
-                    EmailSending.SendEmail(email);
+                    _mailService.Send(email);
 
                     return RedirectToAction(nameof(CheckInbox));
 
