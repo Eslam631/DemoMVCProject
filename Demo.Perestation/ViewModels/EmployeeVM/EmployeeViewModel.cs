@@ -36,7 +36,7 @@ namespace Demo.Perestation.ViewModels.EmployeeVM
         [Display(Name ="Department Id")]
         public int? DepartmentId { get; set; }
 
-     
+       
         public IFormFile? Image { get; set; }
       
     }
