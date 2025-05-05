@@ -1,3 +1,20 @@
+using Demo.Business.Profiles;
+using Demo.Business.Services.AttachmentServices;
+using Demo.Business.Services.DepartmentSevices;
+using Demo.Business.Services.EmployeeServices;
+using Demo.Data.Access.Data.Context;
+using Demo.Data.Access.Models.IdentityModel;
+using Demo.Data.Access.Repositories.DepartmentRepo;
+using Demo.Data.Access.Repositories.EmployeeRepo;
+using Demo.Data.Access.Repositories.UnitOfWork;
+using Demo.Perestation.Helpers;
+using Demo.Perestation.Setting;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+
 namespace Demo.Perestation
 {
     public class Program
@@ -7,8 +24,40 @@ namespace Demo.Perestation
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(Option =>
+            {
+                Option.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 
+            });
+            builder.Services.AddDbContext<ApplicationDbContext>(Option =>
+            { Option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                Option.UseLazyLoadingProxies();
+            });
+
+            builder.Services.AddAutoMapper(E => E.AddProfile(new MappingProfiles()));
+            
+            //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+        builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IAttachmentService, AttachmentService>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+            builder.Services.Configure<MailSetting>(builder.Configuration.GetSection("MailSetting"));
+            builder.Services.AddTransient<IMailService, MailService>();
+            builder.Services.AddAuthentication(o =>
+            {
+                o.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+
+            }).AddGoogle(o =>
+            {
+                IConfiguration GoogleAuthSection = builder.Configuration.GetSection("Authentication:Google");
+                o.ClientId = GoogleAuthSection["ClientId"];
+                o.ClientSecret = GoogleAuthSection["ClientSecret"];
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -21,14 +70,18 @@ namespace Demo.Perestation
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+          
+
+            
 
             app.UseRouting();
 
-        
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=Register}/{id?}");
 
             app.Run();
         }

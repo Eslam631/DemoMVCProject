@@ -1,0 +1,66 @@
+﻿
+@model IEnumerable<DepartmentGetAllDto>
+@{
+    ViewData["Title"] = "Index";
+}
+
+@if (!string.IsNullOrWhiteSpace(TempData["Message"] as string) ){
+<div aria-live="polite" aria-atomic="true" class="toast-container position-fixed p-3" style="bottom: 25px; right:25px; z-index: 100;">
+    <div class="toast fade show " role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto text-success">Success!!</strong>
+            <small>Just now</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            @TempData["Message"]
+        </div>
+    </div>
+</div>
+}
+
+
+<h1 class="my-2">All Department</h1>
+
+<a class=" btn btn-primary my-3" asp-controller="Department" asp-action="Create">Create Department</a>
+
+
+@if(Model.Any()){
+
+    <table class="table table-dark table-hover mt-3">
+       <thead class="text-center">
+           <tr>
+               <th>@Html.DisplayNameFor(D=>D.Code)</th>
+                <th>@Html.DisplayNameFor(D => D.Name)</th>
+                <th>@Html.DisplayNameFor(D => D.Description)</th>
+                <th>@Html.DisplayNameFor(D => D.DateOfCreation)</th>
+              <th>Details</th>
+              <th>Edit</th>
+              <th>Delete</th>
+           </tr>
+       </thead>
+
+       <tbody class="text-center">
+           @foreach(var department in Model){
+               <tr>
+                   <td>@department.Code</td>
+                   <td>@department.Name</td>
+                   <td>@department.Description</td>
+                   <td>@department.DateOfCreation</td>
+
+                    <partial name="_ButtonPartialView"  model="department.Id" />
+                   
+                    <td><a class="btn btn-danger" asp-action="Delete" asp-route-id="@department.Id"><i class="fas fa-edit"></i> Delete</a></td>
+
+                   
+
+               </tr>
+           }
+       </tbody>
+    </table>
+}
+else{
+
+    <h3 class="alert alert-info m-3 border border-5">No Department Found !! </h3>
+
+}

@@ -1,0 +1,15 @@
+﻿@model UserDetailsViewModel 
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1 class="my-5 w-75">User @Model.UserName Details </h1>
+<div class="tab-pane fade show active p-4 border" >
+
+    <partial name="PartialView\UserDetalisAndDeleteUser" model="Model" />
+<div/>
+<div class="mt-4">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-outline-dark">Back To list</a>
+</div>
+</div>
